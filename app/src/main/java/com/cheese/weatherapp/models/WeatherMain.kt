@@ -1,22 +1,23 @@
 package com.example.mikmok.data.models
 import com.cheese.weatherapp.models.*
 
-data class Weathers(
-    val coord: Coord,
-    val weather: List<Weather>,
-    val base: String,
-    val main: Main,
-    val visibility: Long,
+data class WeatherMain(
     val wind: Wind,
     val rain :Rain,
     val clouds: Clouds,
-    val dt: Long,
-    val sys: Sys,
-    val timezone: Long,
-    val id: Long,
     val name: String,
+    val weather: List<Weather>,
+    val base: String,
+    val main: Main,
+    val sys: Sys,
     val cod: Int,
     val message: String,
+//    val coord: Coord,
+//    val visibility: Long,
+//    val dt: Long,
+//    val timezone: Long,
+//    val id: Long,
+
 )
 
 /*

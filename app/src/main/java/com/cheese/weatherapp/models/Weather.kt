@@ -1,9 +1,9 @@
 package com.cheese.weatherapp.models
 
 data class Weather (
-    val id: Long,
+//    val id: Int,
     val main: String,
     val description: String,
-    val icon: String
+//    val icon: String
 )
 
