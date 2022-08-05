@@ -72,7 +72,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
                          showToast(result.message)
                         }
                         else {
-                            attributBiniding(result)
+                            attributBinding(result)
                             weatherState(result.weather[Constants.INDEXT_WEATHER].main.uppercase())
                         }
 
@@ -82,16 +82,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
         })
     }
 
-    private fun attributBiniding(result:WeatherMain){
-        binding.run {
-            binding.cityName.text = "${result.name},${result.sys.country}"
-            binding.temp.text = "${result.main.temp.toCelsius()}°"
-            binding.description.text = result.weather[Constants.INDEXT_WEATHER].description
-            binding.maxMin.text = "${result.main.tempMax.toCelsius()}° Max - ${result.main.tempMin.toCelsius()}° Min"
-            binding.valueWind.text = "${result.wind.speed} km/h"
-            binding.valueClouds.text = "${result.clouds.all.toPercent()}%"
-            binding.valueHumidity.text = "${result.main.humidity.toPercent()}%"
-            binding.valuePressure.text = "${result.main.pressure.toPercent()}%"
+    private fun attributBinding(result:WeatherMain){
+        binding.apply {
+            cityName.text = "${result.name},${result.sys.country}"
+            temp.text = "${result.main.temp.toCelsius()}°"
+            description.text = result.weather[Constants.INDEXT_WEATHER].description
+            maxMin.text = "${result.main.tempMax.toCelsius()}° Max - ${result.main.tempMin.toCelsius()}° Min"
+            valueWind.text = "${result.wind.speed} km/h"
+            valueClouds.text = "${result.clouds.all.toPercent()}%"
+            valueHumidity.text = "${result.main.humidity.toPercent()}%"
+            valuePressure.text = "${result.main.pressure.toPercent()}%"
         }
     }
 
