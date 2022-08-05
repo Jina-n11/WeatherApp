@@ -97,9 +97,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
 
     private fun weatherState(weatherState:String){
         when (weatherState) {
-            WeatherState.CLOUDS.toString() -> binding.weather.setAnimation(R.raw.cloudy)
-            WeatherState.CLEAR.toString() -> binding.weather.setAnimation(R.raw.sunny)
-            WeatherState.RAIN.toString() -> binding.weather.setAnimation(R.raw.rain)
+            WeatherState.CLOUDS.toString() -> {
+                binding.weather.setAnimation(R.raw.cloudy)
+                binding.weather.playAnimation()
+            }
+            WeatherState.CLEAR.toString() -> {
+                binding.weather.setAnimation(R.raw.sunny)
+                binding.weather.playAnimation()
+            }
+            WeatherState.RAIN.toString() -> {
+                binding.weather.setAnimation(R.raw.rain)
+                binding.weather.playAnimation()
+            }
         }
     }
 
