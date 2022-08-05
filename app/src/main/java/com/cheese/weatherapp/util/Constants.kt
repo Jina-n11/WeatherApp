@@ -8,4 +8,5 @@ object Constants {
     const val ACCEPT ="Accept"
     const val  TYPE ="application/json"
     const val CITY  ="Baghdad"
+    const val MAIN_ACTIVITY  ="MAIN_ACTIVITY"
 }
