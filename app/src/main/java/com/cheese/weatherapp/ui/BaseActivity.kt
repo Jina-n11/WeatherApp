@@ -2,11 +2,13 @@ package com.cheese.weatherapp.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 
 abstract class BaseActivity<VB :ViewBinding> :AppCompatActivity() {
     abstract val  LOG_TAG:String
+
     abstract val bindingInflater : (LayoutInflater) -> VB
     private var _binding : ViewBinding? = null
 
@@ -25,6 +27,14 @@ abstract class BaseActivity<VB :ViewBinding> :AppCompatActivity() {
     abstract fun addCallbacks()
     protected fun log(value:Any){
         Log.v(LOG_TAG,value.toString())
+    }
+
+    protected fun showToast(message:String){
+        Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 }

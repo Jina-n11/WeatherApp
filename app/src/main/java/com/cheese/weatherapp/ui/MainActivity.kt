@@ -52,7 +52,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
         }
     }
 
-
     private fun getWeather(cityName:String) {
         val request = Request.Builder()
             .url(Constants.API_URL+"${cityName.trim()}")
@@ -70,7 +69,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
 
                     runOnUiThread {
                         if (result.cod.toString() == Constants.NOT_FOUND) {
-                           showToast(result.message)
+                         showToast(result.message)
                         }
                         else {
                             attributBiniding(result)
@@ -103,11 +102,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
             WeatherState.RAIN.toString() -> binding.weather.setAnimation(R.raw.rain)
         }
     }
-     private fun showToast(message:String){
-         Toast.makeText(
-             this@MainActivity,
-              message,
-             Toast.LENGTH_SHORT
-         ).show()
-     }
+
 }
