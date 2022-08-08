@@ -1,5 +1,5 @@
 package com.example.mikmok.data.models
-import com.cheese.weatherapp.models.*
+import com.cheese.weatherapp.data.models.*
 
 data class WeatherMain(
     val wind: Wind,
