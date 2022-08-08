@@ -1,4 +1,4 @@
-package com.cheese.weatherapp.models
+package com.cheese.weatherapp.data.models
 
 import com.google.gson.annotations.SerializedName
 
