@@ -9,4 +9,5 @@ object Constants {
     const val  TYPE ="application/json"
     const val CITY  ="Baghdad"
     const val MAIN_ACTIVITY  ="MAIN_ACTIVITY"
+    const val CITY_NOT_FOUND  ="city not found"
 }
