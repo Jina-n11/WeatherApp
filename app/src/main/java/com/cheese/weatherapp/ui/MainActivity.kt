@@ -3,6 +3,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import com.cheese.weatherapp.R
 import com.cheese.weatherapp.databinding.ActivityMainBinding
 import com.cheese.weatherapp.models.WeatherState
@@ -11,8 +12,10 @@ import com.example.mikmok.util.Constants
 import com.example.mikmok.util.toCelsius
 import com.example.mikmok.util.toPercent
 import com.google.gson.Gson
+import io.reactivex.rxjava3.core.Observable
 import okhttp3.*
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity<ActivityMainBinding>(){
     private val client = OkHttpClient()
@@ -26,31 +29,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
 
     override fun addCallbacks() {
         onSearchChange()
-        onClickSearchButton()
     }
 
-    private fun onClickSearchButton()= binding.buttonSearch.setOnClickListener {
-            cityName =  binding.searchCity.text.toString()
-            getWeather(cityName=cityName)
+
+    private fun onSearchChange(){
+        val observableSearch =Observable.create<String>{ emitter->
+            binding.searchCity.doOnTextChanged{text, start, before, count ->
+                emitter.onNext(text.toString())
+            }
+        }.debounce(1,TimeUnit.SECONDS)
+        observableSearch.subscribe(
+            {t->getWeather(cityName=t)},
+            {e-> showToast(message = "${Constants.CITY_NOT_FOUND} : $e")
+            }
+        )
+
     }
 
-    private fun onSearchChange() = binding.searchCity.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(s: Editable) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            visibleButton()
-        }
-    })
-
-    private fun visibleButton(){
-        binding.buttonSearch.visibility =android.view.View.VISIBLE
-        if(binding.searchCity.text.isEmpty()){
-            binding.buttonSearch.visibility =android.view.View.INVISIBLE
-        }
-        else{
-            binding.buttonSearch.visibility =android.view.View.VISIBLE
-        }
-    }
 
     private fun getWeather(cityName:String) {
         val request = Request.Builder()
