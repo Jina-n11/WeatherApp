@@ -28,10 +28,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
     override fun addCallbacks() {
          onSearchChange()
     }
-
+//TODO: Remove all code from here that is not related user interaction
 
     private fun onSearchChange(){
-        val observableSearch =Observable.create<String>{ emitter->
+        val observableSearch = Observable.create<String>{ emitter->
             binding.searchCity.doOnTextChanged { text, start, before, count ->
                 if (count !=Constants.INDEXT_COUNT_EMPTY) {
                     emitter.onNext(text.toString())
