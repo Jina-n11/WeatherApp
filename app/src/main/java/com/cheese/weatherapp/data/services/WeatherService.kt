@@ -1,8 +1,7 @@
 package com.cheese.weatherapp.data.services
 
 import com.cheese.weatherapp.data.State
-import com.cheese.weatherapp.data.models.Weather
-import com.example.mikmok.data.models.WeatherMain
+import com.cheese.weatherapp.data.models.WeatherMain
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 

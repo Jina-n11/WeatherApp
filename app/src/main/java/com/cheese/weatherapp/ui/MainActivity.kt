@@ -9,7 +9,7 @@ import com.cheese.weatherapp.data.models.WeatherState
 import com.cheese.weatherapp.data.repository.WeatherRepositoryImp
 import com.cheese.weatherapp.data.request.ApiClient
 import com.cheese.weatherapp.data.services.WeatherService
-import com.example.mikmok.data.models.WeatherMain
+import com.cheese.weatherapp.data.models.WeatherMain
 import com.example.mikmok.util.Constants
 import com.example.mikmok.util.toCelsius
 import com.example.mikmok.util.toPercent
@@ -74,7 +74,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
         }
     }
 
-    private fun attributeBinding(result:WeatherMain){
+    private fun attributeBinding(result: WeatherMain){
         binding.apply {
             cityName.text = "${result.name},${result.sys.country}"
             temp.text = "${result.main.temp.toCelsius()}°"
