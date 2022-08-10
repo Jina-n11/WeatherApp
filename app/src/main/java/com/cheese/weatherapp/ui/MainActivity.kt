@@ -1,24 +1,26 @@
 package com.cheese.weatherapp.ui
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.core.widget.doOnTextChanged
 import com.cheese.weatherapp.R
+import com.cheese.weatherapp.data.State
 import com.cheese.weatherapp.databinding.ActivityMainBinding
 import com.cheese.weatherapp.data.models.WeatherState
+import com.cheese.weatherapp.data.repository.WeatherRepositoryImp
 import com.cheese.weatherapp.data.request.ApiClient
+import com.cheese.weatherapp.data.services.WeatherService
 import com.example.mikmok.data.models.WeatherMain
 import com.example.mikmok.util.Constants
 import com.example.mikmok.util.toCelsius
 import com.example.mikmok.util.toPercent
 import com.google.gson.Gson
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import okhttp3.*
-import java.io.IOException
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity<ActivityMainBinding>(){
     var cityName:String =Constants.CITY
-    val gson =Gson()
-    private val apiClient by lazy { ApiClient() }
     override val LOG_TAG: String =Constants.MAIN_ACTIVITY
     override val bindingInflater: (LayoutInflater) -> ActivityMainBinding = ActivityMainBinding::inflate
 
@@ -28,7 +30,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
     override fun addCallbacks() {
          onSearchChange()
     }
-//TODO: Remove all code from here that is not related user interaction
 
     private fun onSearchChange(){
         val observableSearch = Observable.create<String>{ emitter->
@@ -47,30 +48,33 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
 
 
     private fun getWeather(cityName:String) {
-        apiClient.makeApiRequest(cityName=cityName.trim()).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-               showToast("${Constants.ON_FAILURE} ${e.message}")
-            }
-            override fun onResponse(call: Call, response: Response) {
-                response.body?.string()?.let { jsonString ->
-                    val result = gson.fromJson(jsonString, WeatherMain::class.java)
-
-                    runOnUiThread {
-                        if (result.cod.toString() == Constants.NOT_FOUND) {
-                            showToast(result.message)
-                        }
-                        else {
-                            attributBinding(result)
-                            weatherState(result.weather[Constants.INDEXT_WEATHER].main.uppercase())
-                        }
-
-                    }
-                }
-            }
-        })
+        val weatherService = WeatherService()
+        val weatherRepositoryImp = WeatherRepositoryImp(weatherService)
+        weatherRepositoryImp.getWeatherByCityName(cityName)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                ::onWeather,
+                ::onError
+            )
     }
 
-    private fun attributBinding(result:WeatherMain){
+    private fun onError (throwable: Throwable) {
+        Log.v(LOG_TAG, throwable.message.toString())
+    }
+
+    private fun onWeather(state: State<WeatherMain>) {
+        when(state) {
+            is State.Fail -> showToast("Fail")
+            State.Loading -> showToast("Loading")
+            is State.Success -> {
+                attributeBinding(state.data)
+                weatherState(state.data.weather[Constants.INDEXT_WEATHER].main.uppercase())
+            }
+        }
+    }
+
+    private fun attributeBinding(result:WeatherMain){
         binding.apply {
             cityName.text = "${result.name},${result.sys.country}"
             temp.text = "${result.main.temp.toCelsius()}°"
