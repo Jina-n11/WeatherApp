@@ -1,75 +1,63 @@
 package com.cheese.weatherapp.ui
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import com.cheese.weatherapp.R
 import com.cheese.weatherapp.databinding.ActivityMainBinding
-import com.cheese.weatherapp.models.WeatherState
+import com.cheese.weatherapp.data.models.WeatherState
+import com.cheese.weatherapp.data.request.ApiClient
 import com.example.mikmok.data.models.WeatherMain
 import com.example.mikmok.util.Constants
 import com.example.mikmok.util.toCelsius
 import com.example.mikmok.util.toPercent
 import com.google.gson.Gson
+import io.reactivex.rxjava3.core.Observable
 import okhttp3.*
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity<ActivityMainBinding>(){
-    private val client = OkHttpClient()
     var cityName:String =Constants.CITY
+    val gson =Gson()
+    private val apiClient by lazy { ApiClient() }
     override val LOG_TAG: String =Constants.MAIN_ACTIVITY
     override val bindingInflater: (LayoutInflater) -> ActivityMainBinding = ActivityMainBinding::inflate
 
     override fun setUp() {
       getWeather(cityName=cityName)
     }
-
     override fun addCallbacks() {
-        onSearchChange()
-        onClickSearchButton()
+         onSearchChange()
     }
 
-    private fun onClickSearchButton()= binding.buttonSearch.setOnClickListener {
-            cityName =  binding.searchCity.text.toString()
-            getWeather(cityName=cityName)
+
+    private fun onSearchChange(){
+        val observableSearch =Observable.create<String>{ emitter->
+            binding.searchCity.doOnTextChanged { text, start, before, count ->
+                if (count !=Constants.INDEXT_COUNT_EMPTY) {
+                    emitter.onNext(text.toString())
+                }
+            }
+        }.debounce(Constants.TIME.toLong(),TimeUnit.SECONDS)
+        observableSearch.subscribe(
+            {cityName->getWeather(cityName=cityName)},
+            {notFound-> showToast(message = Constants.CITY_NOT_FOUND)
+            }
+        )
     }
 
-    private fun onSearchChange() = binding.searchCity.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(s: Editable) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            visibleButton()
-        }
-    })
-
-    private fun visibleButton(){
-        binding.buttonSearch.visibility =android.view.View.VISIBLE
-        if(binding.searchCity.text.isEmpty()){
-            binding.buttonSearch.visibility =android.view.View.INVISIBLE
-        }
-        else{
-            binding.buttonSearch.visibility =android.view.View.VISIBLE
-        }
-    }
 
     private fun getWeather(cityName:String) {
-        val request = Request.Builder()
-            .url(Constants.API_URL+"${cityName.trim()}")
-            .get()
-            .addHeader(Constants.ACCEPT, Constants.TYPE)
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
+        apiClient.makeApiRequest(cityName=cityName.trim()).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                showToast("${Constants.ON_FAILURE} ${e.message}")
             }
             override fun onResponse(call: Call, response: Response) {
                 response.body?.string()?.let { jsonString ->
-                    val result = Gson().fromJson(jsonString, WeatherMain::class.java)
+                    val result = gson.fromJson(jsonString, WeatherMain::class.java)
 
                     runOnUiThread {
                         if (result.cod.toString() == Constants.NOT_FOUND) {
-                         showToast(result.message)
+                            showToast(result.message)
                         }
                         else {
                             attributBinding(result)
