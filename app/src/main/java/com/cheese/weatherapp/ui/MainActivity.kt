@@ -10,7 +10,6 @@ import com.example.mikmok.util.Constants
 import com.example.mikmok.util.toCelsius
 import com.example.mikmok.util.toPercent
 import com.google.gson.Gson
-import io.reactivex.rxjava3.core.Observable
 import okhttp3.*
 import java.io.IOException
 import java.util.concurrent.TimeUnit
