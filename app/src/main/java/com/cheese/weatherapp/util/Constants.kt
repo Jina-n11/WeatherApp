@@ -5,10 +5,8 @@ object Constants {
     const val HOST = "api.openweathermap.org"
     const val PATH = "data/2.5/weather"
 
-    const val INDEXT_WEATHER =0
-    const val INDEXT_COUNT_EMPTY =0
-    const val NOT_FOUND = "404"
-    const val ON_FAILURE = "Failed to grab the data due to:"
+    const val INDEX_WEATHER =0
+    const val INDEX_COUNT_EMPTY =0
     const val ACCEPT ="Accept"
     const val  TYPE ="application/json"
     const val CITY  ="Baghdad"

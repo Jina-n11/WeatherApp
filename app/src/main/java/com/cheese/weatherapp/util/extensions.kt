@@ -4,7 +4,6 @@ import com.cheese.weatherapp.R
 import com.cheese.weatherapp.data.models.WeatherState
 
 
-
 fun Double.toPercent(): Double {
     return String.format("%.2f", (this / 100)).toDouble()
 }

@@ -10,9 +10,9 @@ import com.cheese.weatherapp.data.models.WeatherMain
 import com.cheese.weatherapp.data.repository.WeatherRepositoryImp
 import com.cheese.weatherapp.data.services.WeatherService
 import com.cheese.weatherapp.databinding.ActivityMainBinding
-import com.example.mikmok.util.Constants
 import com.cheese.weatherapp.util.getWeatherStateAnimation
 import com.cheese.weatherapp.util.toPercent
+import com.example.mikmok.util.Constants
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -35,7 +35,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun onSearchChange() {
         val observableSearch = Observable.create<String> { emitter ->
             binding.searchCity.doOnTextChanged { text, _, _, count ->
-                if (count != Constants.INDEXT_COUNT_EMPTY) {
+                if (count != Constants.INDEX_COUNT_EMPTY) {
                     emitter.onNext(text.toString())
                 }
             }
@@ -101,9 +101,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.apply {
             cityName.text = "${result.name},${result.sys.country}"
             temp.text = "${result.main.temp}°"
-            description.text = result.weather[Constants.INDEXT_WEATHER].description
+            description.text = result.weather[Constants.INDEX_WEATHER].description
             val maxText=getString(R.string.max_text)
-            val minText=getString(R.string.min_text)
+            val minText= getString(R.string.min_text)
             val percentage=getString(R.string.percentage)
             maxMin.text =
                 "${result.main.tempMax} $maxText - ${result.main.tempMin} $minText"
@@ -112,7 +112,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             valueHumidity.text = "${result.main.humidity.toPercent()}$percentage"
             valuePressure.text = "${result.main.pressure.toPercent()}$percentage"
             val lottieAnimation =
-                result.weather[Constants.INDEXT_WEATHER].main.uppercase().getWeatherStateAnimation()
+                result.weather[Constants.INDEX_WEATHER].main.uppercase().getWeatherStateAnimation()
             weather.setAnimation(lottieAnimation)
 
         }
