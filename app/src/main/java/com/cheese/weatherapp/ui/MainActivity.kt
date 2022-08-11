@@ -65,9 +65,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun onWeather(state: State<WeatherMain>) {
         when (state) {
             is State.Fail -> {
+                hideProgressBarAndShowData()
+            //    hide all mainActivity items and show error items->
+                binding.apply {
+                dataContainer.visibility = View.INVISIBLE
+                errorLottie.visibility = View.VISIBLE
+                citeNotFoundText.visibility = View.VISIBLE
+                }
+
+
             }
             State.Loading -> onLoading()
-            is State.Success -> onSuccess(state.data)
+            is State.Success -> {onSuccess(state.data)
+              // hide error items ->
+                binding.apply {
+                    errorLottie.visibility = View.INVISIBLE
+                    citeNotFoundText.visibility = View.INVISIBLE
+                }
+            }
         }
     }
 
@@ -77,6 +92,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
 
     }
+
 
     private fun onLoading() {
         showProgressBarAndHideData()

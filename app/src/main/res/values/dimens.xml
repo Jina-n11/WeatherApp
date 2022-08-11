@@ -5,6 +5,7 @@
     <dimen name="margin_horizontal">24dp</dimen>
     <dimen name="small_size">4dp</dimen>
     <dimen name="animation_size">120dp</dimen>
+    <dimen name="animation_size2">150dp</dimen>
     <dimen name="margin_larg">32dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="text_larg">28sp</dimen>
