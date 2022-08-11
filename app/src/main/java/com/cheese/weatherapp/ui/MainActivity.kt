@@ -4,15 +4,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.widget.doOnTextChanged
+import com.cheese.weatherapp.R
 import com.cheese.weatherapp.data.State
 import com.cheese.weatherapp.data.models.WeatherMain
 import com.cheese.weatherapp.data.repository.WeatherRepositoryImp
 import com.cheese.weatherapp.data.services.WeatherService
 import com.cheese.weatherapp.databinding.ActivityMainBinding
+import com.cheese.weatherapp.util.getWeatherStateAnimation
+import com.cheese.weatherapp.util.toPercent
 import com.example.mikmok.util.Constants
-import com.example.mikmok.util.getWeatherStateAnimation
-import com.example.mikmok.util.toCelsius
-import com.example.mikmok.util.toPercent
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -35,7 +35,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun onSearchChange() {
         val observableSearch = Observable.create<String> { emitter ->
             binding.searchCity.doOnTextChanged { text, _, _, count ->
-                if (count != Constants.INDEXT_COUNT_EMPTY) {
+                if (count != Constants.INDEX_COUNT_EMPTY) {
                     emitter.onNext(text.toString())
                 }
             }
@@ -100,16 +100,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun bindView(result: WeatherMain) {
         binding.apply {
             cityName.text = "${result.name},${result.sys.country}"
-            temp.text = "${result.main.temp.toCelsius()}°"
-            description.text = result.weather[Constants.INDEXT_WEATHER].description
+            temp.text = "${result.main.temp}°"
+            description.text = result.weather[Constants.INDEX_WEATHER].description
+            val maxText=getString(R.string.max_text)
+            val minText= getString(R.string.min_text)
+            val percentage=getString(R.string.percentage)
             maxMin.text =
-                "${result.main.tempMax.toCelsius()}° Max - ${result.main.tempMin.toCelsius()}° Min"
+                "${result.main.tempMax} $maxText - ${result.main.tempMin} $minText"
             valueWind.text = "${result.wind.speed} km/h"
-            valueClouds.text = "${result.clouds.all.toPercent()}%"
-            valueHumidity.text = "${result.main.humidity.toPercent()}%"
-            valuePressure.text = "${result.main.pressure.toPercent()}%"
+            valueClouds.text = "${result.clouds.all.toPercent()}$percentage"
+            valueHumidity.text = "${result.main.humidity.toPercent()}$percentage"
+            valuePressure.text = "${result.main.pressure.toPercent()}$percentage"
             val lottieAnimation =
-                result.weather[Constants.INDEXT_WEATHER].main.uppercase().getWeatherStateAnimation()
+                result.weather[Constants.INDEX_WEATHER].main.uppercase().getWeatherStateAnimation()
             weather.setAnimation(lottieAnimation)
 
         }
