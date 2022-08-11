@@ -1,11 +1,9 @@
-package com.example.mikmok.util
+package com.cheese.weatherapp.util
 
 import com.cheese.weatherapp.R
 import com.cheese.weatherapp.data.models.WeatherState
 
-fun Double.toCelsius(): Double {
-    return String.format("%.2f", (this - 273.15)).toDouble()
-}
+
 
 fun Double.toPercent(): Double {
     return String.format("%.2f", (this / 100)).toDouble()

@@ -11,9 +11,8 @@ import com.cheese.weatherapp.data.repository.WeatherRepositoryImp
 import com.cheese.weatherapp.data.services.WeatherService
 import com.cheese.weatherapp.databinding.ActivityMainBinding
 import com.example.mikmok.util.Constants
-import com.example.mikmok.util.getWeatherStateAnimation
-import com.example.mikmok.util.toCelsius
-import com.example.mikmok.util.toPercent
+import com.cheese.weatherapp.util.getWeatherStateAnimation
+import com.cheese.weatherapp.util.toPercent
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
