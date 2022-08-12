@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">weather</string>
-    <string name="city_name">city name</string>
+    <string name="city_name">City name</string>
     <string name="name_city">Baghdad ,IQ</string>
     <string name="temp_value">00.00 C</string>
+    <string name="max_text">° Max</string>
+    <string name="min_text">° Min</string>
+    <string name="percentage">%</string>
 </resources>

@@ -8,7 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="color_up">#351C60</color>
+    <color name="color_up2">#532F93</color>
     <color name="color_down">#03092C</color>
+    <color name="color_down2">#00158D</color>
     <color name="gray">#C4C4C4</color>
     <color name="primary">#825CC3</color>
     <color name="primary_icon">#AF93DF</color> //#A282D8
