@@ -64,26 +64,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun onWeather(state: State<WeatherMain>) {
         when (state) {
-            is State.Fail -> {
-                hideProgressBarAndShowData()
-            //    hide all mainActivity items and show error items->
-                binding.apply {
-                dataContainer.visibility = View.INVISIBLE
-                errorLottie.visibility = View.VISIBLE
-                citeNotFoundText.visibility = View.VISIBLE
-                }
-
-
-            }
+            is State.Fail -> onFail()
             State.Loading -> onLoading()
-            is State.Success -> {onSuccess(state.data)
-              // hide error items ->
-                binding.apply {
-                    errorLottie.visibility = View.INVISIBLE
-                    citeNotFoundText.visibility = View.INVISIBLE
-                }
-            }
+            is State.Success -> onSuccess(state.data)
         }
+    }
+
+    private fun onFail() {
+        changeProgressLoadingVisibility(View.INVISIBLE)
+        changeDataContainerVisibility(View.INVISIBLE)
+        changeErrorDataVisibility(View.VISIBLE)
+
     }
 
     private fun onSuccess(weatherMain: WeatherMain) {
@@ -93,24 +84,35 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     }
 
-
     private fun onLoading() {
         showProgressBarAndHideData()
     }
 
-    private fun showProgressBarAndHideData() {
+    private fun changeDataContainerVisibility(visibility: Int) {
+        binding.dataContainer.visibility = visibility
+    }
+
+    private fun changeProgressLoadingVisibility(visibility: Int) {
+        binding.progressLoading.visibility = visibility
+    }
+
+    private fun changeErrorDataVisibility(visibility: Int) {
         binding.apply {
-            progressLoading.visibility = View.VISIBLE
-            dataContainer.visibility = View.INVISIBLE
+            errorLottie.visibility = visibility
+            citeNotFoundText.visibility = visibility
         }
     }
 
-    private fun hideProgressBarAndShowData() {
-        binding.apply {
-            progressLoading.visibility = View.INVISIBLE
-            dataContainer.visibility = View.VISIBLE
-        }
 
+    private fun showProgressBarAndHideData() {
+        changeProgressLoadingVisibility(View.VISIBLE)
+        changeDataContainerVisibility(View.INVISIBLE)
+    }
+
+    private fun hideProgressBarAndShowData() {
+        changeProgressLoadingVisibility(View.INVISIBLE)
+        changeDataContainerVisibility(View.VISIBLE)
+        changeErrorDataVisibility(View.INVISIBLE)
     }
 
     private fun bindView(result: WeatherMain) {
@@ -118,9 +120,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             cityName.text = "${result.name},${result.sys.country}"
             temp.text = "${result.main.temp}°"
             description.text = result.weather[Constants.INDEX_WEATHER].description
-            val maxText=getString(R.string.max_text)
-            val minText= getString(R.string.min_text)
-            val percentage=getString(R.string.percentage)
+            val maxText = getString(R.string.max_text)
+            val minText = getString(R.string.min_text)
+            val percentage = getString(R.string.percentage)
             maxMin.text =
                 "${result.main.tempMax} $maxText - ${result.main.tempMin} $minText"
             valueWind.text = "${result.wind.speed} km/h"
